@@ -1,6 +1,6 @@
 from openai import OpenAI
 
-def IA_upload_openIA(apikey, file_path, file_name):
+def IA_upload_openIA(apikey, file_path):
     client = OpenAI(
         api_key=apikey
     )
@@ -15,7 +15,7 @@ def IA_upload_openIA(apikey, file_path, file_name):
     #print(r)
     return r.id
 
-def IA_ask_openIA(apikey,prompt,file_id_ls,numero_model):
+def IA_ask_openIA(apikey,prompt,file_id_ls,nom_model):
     openai_models = [
         # GPT‑5
         "gpt-5.4",
@@ -53,7 +53,7 @@ def IA_ask_openIA(apikey,prompt,file_id_ls,numero_model):
         )
 
     response = client.responses.create(
-        model=openai_models[numero_model],
+        model=nom_model,
         input=[{
             "role": "user",
             "content": content_list

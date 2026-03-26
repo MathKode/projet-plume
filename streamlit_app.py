@@ -195,13 +195,25 @@ if st.session_state.authenticated :
 
             # 4. Bouton valider
             if st.button("🚀 Valider"):
+                if provider == "ChatGPT":
+                    #Upload file
+                    annales_txt_id = IA_upload_openIA(apikey_openia, annales_txt_path)
+                    roneo_txt_id = IA_upload_openIA(apikey_openia, roneo_txt_path)
+
+                    #Ask IA
+                    reponse_ia = IA_ask_openIA(apikey_openia,prompt,[annales_txt_id,roneo_txt_id],provider)
+                else :
+                    #Upload file
+                    annales_txt_id = IA_upload_anthropic(apikey_anthropic, "annales.txt",annales_txt_path)
+                    roneo_txt_id = IA_upload_anthropic(apikey_anthropic, "roneo.txt",roneo_txt_path)
+
+                    #Ask IA
+                    reponse_ia = IA_ask_openIA(apikey_anthropic,prompt,[annales_txt_id,roneo_txt_id],provider)
+
                 st.success("Configuration validée !")
 
-                st.write("### Résumé :")
-                st.write("Provider :", provider)
-                st.write("Modèle :", model)
-                st.write("Prompt :", prompt)
-
+                st.write(reponse_ia)
+                print(reponse_ia)
 
 else :
     #Mot de passe

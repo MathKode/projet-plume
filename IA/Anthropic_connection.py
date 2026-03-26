@@ -11,7 +11,7 @@ def IA_upload_anthropic(apikey, file_name, file_path):
     client.close()
     return r.id
 
-def IA_ask_anthropic(apikey,prompt,file_id_ls,numero_model):
+def IA_ask_anthropic(apikey,prompt,file_id_ls,nom_model):
     claude_models_api = [
         "claude-opus-4-6",
         "claude-opus-4-5",
@@ -47,7 +47,7 @@ def IA_ask_anthropic(apikey,prompt,file_id_ls,numero_model):
             }
         ],
         betas=["files-api-2025-04-14"],
-        model=claude_models_api[numero_model],
+        model=nom_model,
     )
     client.close()
     return "\n".join(message.content[0].text.split('\\n'))
