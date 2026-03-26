@@ -6,6 +6,7 @@ import docx
 import pymupdf
 from IA.Anthropic_connection import *
 from IA.OpenIA_connection import *
+from surligner import *
 
 # ─────────────────────────────────────────────
 # Interface Streamlit
@@ -240,6 +241,54 @@ if st.session_state.authenticated :
                 st.session_state.index = 0
                 st.session_state.selection = []
                 st.session_state.ia_done = True  # Flag pour indiquer que l'IA a terminé
+            
+            # 🔹 SECTION DE TRI (en dehors du bouton Valider)
+            if "ia_done" in st.session_state and st.session_state.ia_done:
+                st.title("🧠 Tri des notions")
+
+                # 🔹 Fin du processus
+                if st.session_state.index >= len(st.session_state.notion_ls):
+                    st.success("✅ Tri terminé !")
+
+                    st.write("### 📌 Liste conservée :")
+                    st.write(st.session_state.selection)
+
+                    #Surligner dans le RONEO
+                    roneo_final_path = os.path.join(tmpdir, f"NEW_{roneo_file.name}")
+                    surligner_mots(roneo_path, st.session_state.selection, roneo_final_path)
+
+                    # Lire le fichier en binaire
+                    with open(roneo_final_path, "rb") as f:
+                        data = f.read()
+
+                    # Bouton de téléchargement
+                    st.download_button(
+                        label="💾 Télécharger le fichier Word",
+                        data=data,
+                        file_name=f"NEW_{roneo_file.name}",  # Nom que verra l'utilisateur
+                        mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    )
+
+
+                else:
+                    terme = st.session_state.notion_ls[st.session_state.index]
+
+                    st.write(f"### Terme : {terme}")
+
+                    col1, col2 = st.columns(2)
+
+                    # 🔴 Bouton supprimer
+                    with col1:
+                        if st.button("❌ Je supprime"):
+                            st.session_state.index += 1
+                            st.rerun()
+
+                    # 🟢 Bouton garder
+                    with col2:
+                        if st.button("✅ Je garde"):
+                            st.session_state.selection.append(terme)
+                            st.session_state.index += 1
+                            st.rerun()
 
 
 
@@ -257,34 +306,3 @@ else :
             st.error("Code incorrect ❌")
 
 
-
-# 🔹 SECTION DE TRI (en dehors du bouton Valider)
-if "ia_done" in st.session_state and st.session_state.ia_done:
-    st.title("🧠 Tri des notions")
-
-    # 🔹 Fin du processus
-    if st.session_state.index >= len(st.session_state.notion_ls):
-        st.success("✅ Tri terminé !")
-
-        st.write("### 📌 Liste conservée :")
-        st.write(st.session_state.selection)
-
-    else:
-        terme = st.session_state.notion_ls[st.session_state.index]
-
-        st.write(f"### Terme : {terme}")
-
-        col1, col2 = st.columns(2)
-
-        # 🔴 Bouton supprimer
-        with col1:
-            if st.button("❌ Je supprime"):
-                st.session_state.index += 1
-                #st.rerun()
-
-        # 🟢 Bouton garder
-        with col2:
-            if st.button("✅ Je garde"):
-                st.session_state.selection.append(terme)
-                st.session_state.index += 1
-                #st.rerun()

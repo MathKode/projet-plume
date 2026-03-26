@@ -71,7 +71,7 @@ def __analyser_paragraph(paragraph, mot_ls):
             for new_run in result_run:
                 paragraph._element.append(new_run._element)
 
-def surligner_mots(doc, mot_ls):
+def surligner_mots(doc, mot_ls, save_path):
     fichier = Document(doc)
     for paragraph in fichier.paragraphs:
         __analyser_paragraph(paragraph, mot_ls)
@@ -82,7 +82,7 @@ def surligner_mots(doc, mot_ls):
                 for paragraph in cell.paragraphs:
                     __analyser_paragraph(paragraph, mot_ls)
 
-    fichier.save('./v3/result_test.docx')
+    fichier.save(save_path)
 
 
 #surligner_mots("./v3/test.docx",["surligner", "un test"])
