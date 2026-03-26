@@ -202,14 +202,14 @@ if st.session_state.authenticated :
                     roneo_txt_id = IA_upload_openIA(apikey_openia, roneo_txt_path)
 
                     #Ask IA
-                    reponse_ia = IA_ask_openIA(apikey_openia,prompt,[annales_txt_id,roneo_txt_id],provider)
+                    reponse_ia = IA_ask_openIA(apikey_openia,prompt,[annales_txt_id,roneo_txt_id],model)
                 else :
                     #Upload file
                     annales_txt_id = IA_upload_anthropic(apikey_anthropic, "annales.txt",annales_txt_path)
                     roneo_txt_id = IA_upload_anthropic(apikey_anthropic, "roneo.txt",roneo_txt_path)
 
                     #Ask IA
-                    reponse_ia = IA_ask_openIA(apikey_anthropic,prompt,[annales_txt_id,roneo_txt_id],provider)
+                    reponse_ia = IA_ask_openIA(apikey_anthropic,prompt,[annales_txt_id,roneo_txt_id],model)
 
                 st.success("Configuration validée !")
 
