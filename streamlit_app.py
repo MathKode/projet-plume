@@ -234,39 +234,46 @@ if st.session_state.authenticated :
                 notion_ls = creation_notion_ls(reponse_ia)
                 st.write(notion_ls)
 
-                # 🔹 Initialisation
+
+                st.title("🧠 Tri des notions")
+
+                # 🔹 Exemple de liste
+                if "notion_ls" not in st.session_state:
+                    st.session_state.notion_ls = notion_ls
+
+                # 🔹 État du tri
                 if "index" not in st.session_state:
                     st.session_state.index = 0
 
                 if "selection" not in st.session_state:
                     st.session_state.selection = []
 
+                # 🔹 Fin du processus
+                if st.session_state.index >= len(st.session_state.notion_ls):
+                    st.success("✅ Tri terminé !")
 
-                # 🔹 Zone isolée
-                zone = st.container()
+                    st.write("### 📌 Liste conservée :")
+                    st.write(st.session_state.selection)
 
-                with zone:
-                    if st.session_state.index >= len(notion_ls):
-                        st.success("✅ Terminé")
-                        st.write(st.session_state.selection)
+                else:
+                    terme = st.session_state.notion_ls[st.session_state.index]
 
-                    else:
-                        terme = notion_ls[st.session_state.index]
-                        st.write(f"### {terme}")
+                    st.write(f"### Terme : {terme}")
 
-                        col1, col2 = st.columns(2)
+                    col1, col2 = st.columns(2)
 
-                        def supprimer():
+                    # 🔴 Bouton supprimer
+                    with col1:
+                        if st.button("❌ Je supprime"):
                             st.session_state.index += 1
+                            st.rerun()
 
-                        def garder():
+                    # 🟢 Bouton garder
+                    with col2:
+                        if st.button("✅ Je garde"):
                             st.session_state.selection.append(terme)
                             st.session_state.index += 1
-
-                        col1.button("❌ Je supprime", on_click=supprimer)
-                        col2.button("✅ Je garde", on_click=garder)
-                
-                st.write(st.session_state.selection)
+                            st.rerun()
 
 
 
