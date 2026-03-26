@@ -1,4 +1,5 @@
 from openai import OpenAI
+import streamlit as st
 
 def IA_upload_openIA(apikey, file_path):
     client = OpenAI(
@@ -51,6 +52,8 @@ def IA_ask_openIA(apikey,prompt,file_id_ls,nom_model):
         content_list.append(
                {"type": "input_file", "file_id": file_id},
         )
+
+    st.write(content_list)
 
     response = client.responses.create(
         model=nom_model,

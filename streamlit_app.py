@@ -196,6 +196,7 @@ if st.session_state.authenticated :
 
             # 4. Bouton valider
             if st.button("🚀 Valider"):
+                st.write(f"[{model}]")
                 if provider == "ChatGPT":
                     #Upload file
                     annales_txt_id = IA_upload_openIA(apikey_openia, annales_txt_path)
