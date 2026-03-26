@@ -235,45 +235,11 @@ if st.session_state.authenticated :
                 st.write(notion_ls)
 
 
-                st.title("🧠 Tri des notions")
-
-                # 🔹 Exemple de liste
-                if "notion_ls" not in st.session_state:
-                    st.session_state.notion_ls = notion_ls
-
-                # 🔹 État du tri
-                if "index" not in st.session_state:
-                    st.session_state.index = 0
-
-                if "selection" not in st.session_state:
-                    st.session_state.selection = []
-
-                # 🔹 Fin du processus
-                if st.session_state.index >= len(st.session_state.notion_ls):
-                    st.success("✅ Tri terminé !")
-
-                    st.write("### 📌 Liste conservée :")
-                    st.write(st.session_state.selection)
-
-                else:
-                    terme = st.session_state.notion_ls[st.session_state.index]
-
-                    st.write(f"### Terme : {terme}")
-
-                    col1, col2 = st.columns(2)
-
-                    # 🔴 Bouton supprimer
-                    with col1:
-                        if st.button("❌ Je supprime"):
-                            st.session_state.index += 1
-                            st.rerun()
-
-                    # 🟢 Bouton garder
-                    with col2:
-                        if st.button("✅ Je garde"):
-                            st.session_state.selection.append(terme)
-                            st.session_state.index += 1
-                            st.rerun()
+                # Stocker les données
+                st.session_state.notion_ls = notion_ls
+                st.session_state.index = 0
+                st.session_state.selection = []
+                st.session_state.ia_done = True  # Flag pour indiquer que l'IA a terminé
 
 
 
@@ -290,4 +256,35 @@ else :
         else:
             st.error("Code incorrect ❌")
 
-            
+
+
+# 🔹 SECTION DE TRI (en dehors du bouton Valider)
+if "ia_done" in st.session_state and st.session_state.ia_done:
+    st.title("🧠 Tri des notions")
+
+    # 🔹 Fin du processus
+    if st.session_state.index >= len(st.session_state.notion_ls):
+        st.success("✅ Tri terminé !")
+
+        st.write("### 📌 Liste conservée :")
+        st.write(st.session_state.selection)
+
+    else:
+        terme = st.session_state.notion_ls[st.session_state.index]
+
+        st.write(f"### Terme : {terme}")
+
+        col1, col2 = st.columns(2)
+
+        # 🔴 Bouton supprimer
+        with col1:
+            if st.button("❌ Je supprime"):
+                st.session_state.index += 1
+                st.rerun()
+
+        # 🟢 Bouton garder
+        with col2:
+            if st.button("✅ Je garde"):
+                st.session_state.selection.append(terme)
+                st.session_state.index += 1
+                st.rerun()
