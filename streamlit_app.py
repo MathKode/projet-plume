@@ -280,11 +280,11 @@ if "ia_done" in st.session_state and st.session_state.ia_done:
         with col1:
             if st.button("❌ Je supprime"):
                 st.session_state.index += 1
-                st.rerun()
+                #st.rerun()
 
         # 🟢 Bouton garder
         with col2:
             if st.button("✅ Je garde"):
                 st.session_state.selection.append(terme)
                 st.session_state.index += 1
-                st.rerun()
+                #st.rerun()
