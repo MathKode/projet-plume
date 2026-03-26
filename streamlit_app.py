@@ -38,14 +38,14 @@ if st.session_state.authenticated :
     with col1:
         roneo_file = st.file_uploader(
             "Ronéo source",
-            type=["pdf", "docx"],
+            type=["docx"],
             help="Le ronéo dans lequel détecter les annales"
         )
 
     with col2:
         annales_file = st.file_uploader(
             "Fichier annales",
-            type=["pdf", "docx"],
+            type=["pdf"],
             help="Le fichier annales à enrichir / compléter"
         )
 
