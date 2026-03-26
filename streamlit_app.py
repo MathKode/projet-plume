@@ -234,6 +234,40 @@ if st.session_state.authenticated :
                 notion_ls = creation_notion_ls(reponse_ia)
                 st.write(notion_ls)
 
+                # 🔹 Initialisation
+                if "index" not in st.session_state:
+                    st.session_state.index = 0
+
+                if "selection" not in st.session_state:
+                    st.session_state.selection = []
+
+
+                # 🔹 Zone isolée
+                zone = st.container()
+
+                with zone:
+                    if st.session_state.index >= len(notion_ls):
+                        st.success("✅ Terminé")
+                        st.write(st.session_state.selection)
+
+                    else:
+                        terme = notion_ls[st.session_state.index]
+                        st.write(f"### {terme}")
+
+                        col1, col2 = st.columns(2)
+
+                        def supprimer():
+                            st.session_state.index += 1
+
+                        def garder():
+                            st.session_state.selection.append(terme)
+                            st.session_state.index += 1
+
+                        col1.button("❌ Je supprime", on_click=supprimer)
+                        col2.button("✅ Je garde", on_click=garder)
+                
+                st.write(st.session_state.selection)
+
 
 
 else :
