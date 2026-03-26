@@ -16,7 +16,7 @@ def IA_upload_openIA(apikey, file_path):
     #print(r)
     return r.id
 
-def IA_ask_openIA(apikey,prompt,file_id_ls,nom_model):
+def IA_ask_openIA(apikey,prompt,file_id_ls,nom_model_vr):
     openai_models = [
         # GPT‑5
         "gpt-5.4",
@@ -56,7 +56,7 @@ def IA_ask_openIA(apikey,prompt,file_id_ls,nom_model):
     st.write(content_list)
 
     response = client.responses.create(
-        model=nom_model,
+        model=str(nom_model_vr),
         input=[{
             "role": "user",
             "content": content_list
