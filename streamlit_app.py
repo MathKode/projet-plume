@@ -5,6 +5,7 @@ from pathlib import Path
 import docx 
 import pymupdf
 
+st.warning(st.secrets["API_KEY_OPENAI"])
 
 # ─────────────────────────────────────────────
 # Interface Streamlit
