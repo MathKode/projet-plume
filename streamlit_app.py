@@ -7,6 +7,8 @@ import pymupdf
 from IA.Anthropic_connection import *
 from IA.OpenIA_connection import *
 from surligner import *
+from conversion import *
+from prompt import *
 
 # ─────────────────────────────────────────────
 # Interface Streamlit
@@ -177,9 +179,7 @@ if st.session_state.authenticated :
                 )
 
             # 3. Zone de prompt (modifiable)
-            prompt = st.text_area(
-                "Prompt :",
-                value="""Tu as pour mission d'identifier dans les cours (fichier cours.txt) les connaissances requises pour répondre annales (annales.txt).
+            pt = """Tu as pour mission d'identifier dans les cours (fichier cours.txt) les connaissances requises pour répondre annales (annales.txt).
 
             Fichiers :
             - Un fichier annales.txt contenant les annales tombées au concours et leur correction
@@ -191,7 +191,10 @@ if st.session_state.authenticated :
 
             Format de sortie :
             Liste courte, chaque élément = 1 notion (3 à 6 mots max qui correspondent exactement à ce qui est écrit dans cours.txt) avec, pour faciliter le repérage, le mot précédant + [AN] + notion + [/AN] + mot suivant. J'attends une liste sans ajout autre.
-            """,
+            """
+            prompt = st.text_area(
+                "Prompt :",
+                value=PROMPT_UNIQUE_AMELIORE,
                 height=300
             )
 
