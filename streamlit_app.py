@@ -57,8 +57,8 @@ if st.session_state.authenticated :
     # Afficher le bouton seulement si les deux fichiers sont chargés
     if roneo_file and annales_file:
         #st.divider()
-        if st.button("Démarrer le script"):
-            st.session_state.bt_demarrage = True
+        #if st.button("Démarrer le script"):
+        st.session_state.bt_demarrage = True
     else:
         st.info("⬆️ Importe les deux fichiers pour démarrer l'analyse.", icon="ℹ️")
 
@@ -215,7 +215,26 @@ if st.session_state.authenticated :
                 st.success("Configuration validée !")
 
                 st.write(reponse_ia)
+
+                #Traitement de la réponse de l'IA :
+                def creation_notion_ls(reponse_ia):
+                    notions_ls = []
+                    for i in reponse_ia.split("\n"):
+                        j = i.split('[AN]')
+                        if len(j)>1:
+                            notion = j[1].split('[/AN]')[0]
+                            #retire les espaces si jamais au début et à la fin
+                            if notion[0] == " ": notion = notion[1:]
+                            if notion[-1] == " ": notion = notion[:-1]
+                            notions_ls.append(notion)
+                    return notions_ls
+
                 print(reponse_ia)
+                
+                notion_ls = creation_notion_ls(reponse_ia)
+                st.write(notion_ls)
+
+
 
 else :
     #Mot de passe
