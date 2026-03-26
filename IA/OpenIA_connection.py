@@ -1,19 +1,25 @@
 from openai import OpenAI
-import streamlit as st
+import os
 
 def IA_upload_openIA(apikey, file_path):
     client = OpenAI(
         api_key=apikey
     )
-    r = client.files.create(
-        file=open(file_path, "rb"),
-        purpose="assistants",
-        expires_after={
-            "anchor": "created_at",
-            "seconds": 3600
-        }
-    )
-    #print(r)
+    filename = os.path.basename(file_path)
+    
+    if "." not in filename:
+        filename = filename + ".txt"
+
+    with open(file_path, "rb") as f:
+        r = client.files.create(
+            file=(filename, f),  # 👈 CRUCIAL
+            purpose="assistants",
+            expires_after={
+                "anchor": "created_at",
+                "seconds": 3600
+            }
+        )
+
     return r.id
 
 def IA_ask_openIA(apikey,prompt,file_id_ls,nom_model_vr):
