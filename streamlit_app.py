@@ -7,8 +7,6 @@ import pymupdf
 from IA.Anthropic_connection import *
 from IA.OpenIA_connection import *
 
-st.warning(st.secrets["API_KEY_OPENAI"])
-
 # ─────────────────────────────────────────────
 # Interface Streamlit
 # ─────────────────────────────────────────────
@@ -133,11 +131,83 @@ if st.session_state.authenticated :
             apikey_openia = st.secrets["API_KEY_OPENAI"]
             apikey_anthropic = st.secrets["API_KEY_ANTHROPIC"]
 
+            st.title("⚙️ Configuration IA")
+
+            # 1. Choix du provider
+            provider = st.selectbox(
+                "Choisis le type d'IA :",
+                ["ChatGPT", "Anthropic (Claude)"]
+            )
+
+            # 2. Choix du modèle selon provider
+            if provider == "ChatGPT":
+                model = st.selectbox(
+                    "Choisis le modèle ChatGPT :",
+                    [
+                        "gpt-5.4",
+                        "gpt-5.4-pro",
+                        "gpt-5.2",
+                        "gpt-5.2-pro",
+                        "gpt-5.1",
+                        "gpt-5",
+                        "gpt-5-mini",
+                        "gpt-5-nano",
+                        "gpt-4.1",
+                        "gpt-4.1-mini",
+                        "gpt-4.1-nano"
+                    ]
+                )
+            else:
+                model = st.selectbox(
+                    "Choisis le modèle Claude :",
+                    [
+                        "claude-opus-4-6",
+                        "claude-opus-4-5",
+                        "claude-opus-4-1",
+                        "claude-opus-4",
+                        "claude-sonnet-4-6",
+                        "claude-sonnet-4",
+                        "claude-sonnet-3-7",
+                        "claude-haiku-4-5",
+                        "claude-haiku-3-5",
+                        "claude-haiku-3"
+                    ]
+                )
+
+            # 3. Zone de prompt (modifiable)
+            prompt = st.text_area(
+                "Prompt :",
+                value="""Tu as pour mission d'identifier dans les cours (fichier cours.txt) les connaissances requises pour répondre annales (annales.txt).
+
+            Fichiers :
+            - Un fichier annales.txt contenant les annales tombées au concours et leur correction
+            - Un fichier cours.txt contenant un cours dans lequel on cherche les notions demandé le jour de l'examen
+
+            Consignes :
+            - Rescencer dans le cours des mots ou bout de phrase essentiel à connaître pour répondre aux annales.
+            - Relever les passages exactes du cours
+
+            Format de sortie :
+            Liste courte, chaque élément = 1 notion (3 à 6 mots max qui correspondent exactement à ce qui est écrit dans cours.txt) avec, pour faciliter le repérage, le mot précédant + [AN] + notion + [/AN] + mot suivant. J'attends une liste sans ajout autre.
+            """,
+                height=300
+            )
+
+            # 4. Bouton valider
+            if st.button("🚀 Valider"):
+                st.success("Configuration validée !")
+
+                st.write("### Résumé :")
+                st.write("Provider :", provider)
+                st.write("Modèle :", model)
+                st.write("Prompt :", prompt)
+
+
 else :
     #Mot de passe
     st.title("🔐 Accès protégé")
     
-    code = st.text_input("Entre le code secret :", type="password")
+    code = st.text_input("Entre le code secret :")
 
     if st.button("Valider"):
         if code == st.secrets['SECRET_CODE']:
