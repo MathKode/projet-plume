@@ -59,8 +59,6 @@ def IA_ask_openIA(apikey,prompt,file_id_ls,nom_model_vr):
                {"type": "input_file", "file_id": file_id},
         )
 
-    st.write(content_list)
-
     response = client.responses.create(
         model=str(nom_model_vr),
         input=[{
