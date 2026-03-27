@@ -1,6 +1,6 @@
-# 📄 Document question answering template
+# 📄 Projet Plume
 
-A simple Streamlit app that answers questions about an uploaded document via OpenAI's GPT-3.5.
+Mettre les annales dans les ronéos et bien plus encore
 
 [![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://document-question-answering-template.streamlit.app/)
 
