@@ -273,21 +273,22 @@ if st.session_state.authenticated :
                     st.session_state.notions_supprimees = set()
  
                 # CSS pour styliser les cases
-                st.markdown("""
-                    <style>
-                    div[data-testid="column"] button {
-                        width: 100%;
-                        margin-bottom: 10px;
-                        padding: 15px;
-                        border-radius: 8px;
-                        border: 2px solid #ddd;
-                        background-color: white;
-                        text-align: center;
-                        font-size: 14px;
-                        cursor: pointer;
-                    }
-                    </style>
-                """, unsafe_allow_html=True)
+                
+                #st.markdown("""
+                 #   <style>
+                  #  div[data-testid="column"] button {
+                   #     width: 100%;
+                    #    margin-bottom: 10px;
+                     #   padding: 15px;
+                      #  border-radius: 8px;
+                       # border: 2px solid #ddd;
+                #        background-color: white;
+                 #       text-align: center;
+                  #      font-size: 14px;
+                   #     cursor: pointer;
+                    #}
+                #    </style>
+                #""", unsafe_allow_html=True)
  
                 # Afficher les notions en grille 2 colonnes
                 cols = st.columns(2)
@@ -331,6 +332,7 @@ if st.session_state.authenticated :
                     if n not in st.session_state.notions_supprimees
                 ]
                 
+                col1, col2, col3 = st.columns([2, 2, 1])
                     
                 
                 with col1:
