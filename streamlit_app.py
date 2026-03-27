@@ -246,10 +246,11 @@ if st.session_state.authenticated :
                             #retire les espaces si jamais au début et à la fin
                             if notion[0] == " ": notion = notion[1:]
                             if notion[-1] == " ": notion = notion[:-1]
-                            notions_ls.append(notion)
+                            
+                            if notion not in notion_ls:
+                                notions_ls.append(notion)
+                                
                     return notions_ls
-
-                print(reponse_ia)
                 
                 notion_ls = creation_notion_ls(reponse_ia)
                 st.write(notion_ls)
@@ -271,24 +272,6 @@ if st.session_state.authenticated :
                 # Initialiser l'ensemble des notions à supprimer si besoin
                 if "notions_supprimees" not in st.session_state:
                     st.session_state.notions_supprimees = set()
- 
-                # CSS pour styliser les cases
-                
-                #st.markdown("""
-                 #   <style>
-                  #  div[data-testid="column"] button {
-                   #     width: 100%;
-                    #    margin-bottom: 10px;
-                     #   padding: 15px;
-                      #  border-radius: 8px;
-                       # border: 2px solid #ddd;
-                #        background-color: white;
-                 #       text-align: center;
-                  #      font-size: 14px;
-                   #     cursor: pointer;
-                    #}
-                #    </style>
-                #""", unsafe_allow_html=True)
  
                 # Afficher les notions en grille 2 colonnes
                 cols = st.columns(2)
