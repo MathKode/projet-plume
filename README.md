@@ -2,7 +2,7 @@
 
 Mettre les annales dans les ronéos et bien plus encore
 
-[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://document-question-answering-template.streamlit.app/)
+[![Open in Streamlit](https://projet-plume.streamlit.app/)
 
 ### How to run it on your own machine
 
