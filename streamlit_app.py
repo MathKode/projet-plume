@@ -23,10 +23,19 @@ st.set_page_config(
 if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
 
-
+if roneo_file and annales_file:
+    # SAUVEGARDER LE CONTENU ET LE NOM DES FICHIER SI ILS SONT OK
+    if "roneo_file_name" not in st.session_state:
+        st.session_state.roneo_file_name = roneo_file.name
+    if "annales_file_name" not in st.session_state:
+        st.session_state.annales_file_name = annales_file.name
+    # 🔑 SAUVEGARDER LE CONTENU DES FICHIERS
+    if "roneo_file_bytes" not in st.session_state:
+        st.session_state.roneo_file_bytes = roneo_file.getvalue()
+    if "annales_file_bytes" not in st.session_state:
+        st.session_state.annales_file_bytes = annales_file.getvalue()
 
 if st.session_state.authenticated :
-    # Créer un bouton pour déclencher l'upload
 
     st.title("📄 Détection d'annales dans un ronéo")
     st.caption("Importe tes fichiers, réponds aux questions, récupère le résultat.")
@@ -59,25 +68,44 @@ if st.session_state.authenticated :
 
     # Afficher le bouton seulement si les deux fichiers sont chargés
     if roneo_file and annales_file:
-        #st.divider()
-        #if st.button("Démarrer le script"):
+        
+        # SAUVEGARDER LES NOMS DES FICHIERS
+        if "roneo_file_name" not in st.session_state:
+            st.session_state.roneo_file_name = roneo_file.name
+        if "annales_file_name" not in st.session_state:
+            st.session_state.annales_file_name = annales_file.name
+        
+        # SAUVEGARDER LE CONTENU DES FICHIERS
+        if "roneo_file_bytes" not in st.session_state:
+            st.session_state.roneo_file_bytes = roneo_file.getvalue()
+        if "annales_file_bytes" not in st.session_state:
+            st.session_state.annales_file_bytes = annales_file.getvalue()
+        
         st.session_state.bt_demarrage = True
     else:
-        st.info("⬆️ Importe les deux fichiers pour démarrer l'analyse.", icon="ℹ️")
+        st.info("Importe les deux fichiers pour démarrer l'analyse.", icon="ℹ️")
 
 
     if st.session_state.bt_demarrage:
         st.caption("Le Script est en cours de fonctionnement, cela peut prendre 2/3min")
         #st.header("2 · Questions")
 
+         # ✅ VÉRIFIER QUE LES DONNÉES SONT EN SESSION
+        if "roneo_file_bytes" not in st.session_state or "annales_file_bytes" not in st.session_state or "roneo_file_name" not in st.session_state or "annales_file_name" not in st.session_state:
+            st.error("⚠️ Fichiers manquants. Recharge la page et réimporte-les.")
+            st.session_state.bt_demarrage = False
+            st.stop()
+
         # Sauvegarde temporaire des fichiers uploadés
         with tempfile.TemporaryDirectory() as tmpdir:
-            roneo_path = os.path.join(tmpdir, roneo_file.name)
-            annales_path = os.path.join(tmpdir, annales_file.name)
+            # ✅ UTILISER LES DONNÉES SAUVEGARDÉES
+            roneo_path = os.path.join(tmpdir, st.session_state.roneo_file_name)
+            annales_path = os.path.join(tmpdir, st.session_state.annales_file_name)
+            
             with open(roneo_path, "wb") as f:
-                f.write(roneo_file.getbuffer())
+                f.write(st.session_state.roneo_file_bytes)
             with open(annales_path, "wb") as f:
-                f.write(annales_file.getbuffer())
+                f.write(st.session_state.annales_file_bytes)
 
             # Lance l'analyse (mise en cache pour éviter de ré-analyser à chaque interaction)
             @st.cache_data(show_spinner="Analyse en cours…")
