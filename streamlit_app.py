@@ -247,7 +247,7 @@ if st.session_state.authenticated :
                             if notion[0] == " ": notion = notion[1:]
                             if notion[-1] == " ": notion = notion[:-1]
                             
-                            if notion not in notion_ls:
+                            if notion not in notions_ls_var:
                                 notions_ls_var.append(notion)
                                 
                     return notions_ls_var
