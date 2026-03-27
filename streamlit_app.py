@@ -238,7 +238,7 @@ if st.session_state.authenticated :
 
                 #Traitement de la réponse de l'IA :
                 def creation_notion_ls(reponse_ia):
-                    notions_ls = []
+                    notions_ls_var = []
                     for i in reponse_ia.split("\n"):
                         j = i.split('[AN]')
                         if len(j)>1:
@@ -248,9 +248,9 @@ if st.session_state.authenticated :
                             if notion[-1] == " ": notion = notion[:-1]
                             
                             if notion not in notion_ls:
-                                notions_ls.append(notion)
+                                notions_ls_var.append(notion)
                                 
-                    return notions_ls
+                    return notions_ls_var
                 
                 notion_ls = creation_notion_ls(reponse_ia)
                 st.write(notion_ls)
