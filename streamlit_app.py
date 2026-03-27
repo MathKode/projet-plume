@@ -262,11 +262,8 @@ if st.session_state.authenticated :
                 st.session_state.ia_done = True  # Flag pour indiquer que l'IA a terminé
             
             # 🔹 SECTION DE TRI (en dehors du bouton Valider)
-            if "ia_done" in st.session_state and st.session_state.ia_done:
-                st.title("🧠 Tri des notions")
-
-                # 🔹 Fin du processus
-                if st.session_state.index >= len(st.session_state.notion_ls):
+            """
+            if st.session_state.index >= len(st.session_state.notion_ls):
                     st.success("✅ Tri terminé !")
 
                     st.write("### 📌 Liste conservée :")
@@ -288,27 +285,116 @@ if st.session_state.authenticated :
                         mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                     )
 
-
-                else:
-                    terme = st.session_state.notion_ls[st.session_state.index]
-
-                    st.write(f"### Terme : {terme}")
-
-                    col1, col2 = st.columns(2)
-
-                    # 🔴 Bouton supprimer
-                    with col1:
-                        if st.button("❌ Je supprime"):
-                            st.session_state.index += 1
+            """
+            if "ia_done" in st.session_state and st.session_state.ia_done:
+                st.title("🧠 Tri des notions")
+                st.caption("Clique sur les notions à **supprimer** (elles passeront en rouge)")
+ 
+                # Initialiser l'ensemble des notions à supprimer si besoin
+                if "notions_supprimees" not in st.session_state:
+                    st.session_state.notions_supprimees = set()
+ 
+                # CSS pour styliser les cases
+                st.markdown("""
+                    <style>
+                    div[data-testid="column"] button {
+                        width: 100%;
+                        margin-bottom: 10px;
+                        padding: 15px;
+                        border-radius: 8px;
+                        border: 2px solid #ddd;
+                        background-color: white;
+                        transition: all 0.3s ease;
+                        text-align: center;
+                        font-size: 14px;
+                        cursor: pointer;
+                    }
+                    div[data-testid="column"] button:hover {
+                        border-color: #999;
+                        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                    }
+                    </style>
+                """, unsafe_allow_html=True)
+ 
+                # Afficher les notions en grille 2 colonnes
+                cols = st.columns(2)
+                
+                for idx, notion in enumerate(st.session_state.notion_ls):
+                    col = cols[idx % 2]
+                    
+                    with col:
+                        # Déterminer le style du bouton
+                        is_supprimee = notion in st.session_state.notions_supprimees
+                        
+                        if is_supprimee:
+                            button_type = "secondary"
+                            emoji = "🗑️"
+                            label = f"{emoji} ~~{notion}~~"
+                        else:
+                            button_type = "primary"
+                            emoji = "✅"
+                            label = f"{emoji} {notion}"
+                        
+                        # Bouton toggle
+                        if st.button(
+                            label,
+                            key=f"notion_{idx}",
+                            type=button_type,
+                            use_container_width=True
+                        ):
+                            # Toggle : ajouter ou retirer de l'ensemble
+                            if is_supprimee:
+                                st.session_state.notions_supprimees.discard(notion)
+                            else:
+                                st.session_state.notions_supprimees.add(notion)
                             st.rerun()
-
-                    # 🟢 Bouton garder
-                    with col2:
-                        if st.button("✅ Je garde"):
-                            st.session_state.selection.append(terme)
-                            st.session_state.index += 1
-                            st.rerun()
-
+ 
+                # Séparateur
+                st.divider()
+ 
+                # Résumé et validation
+                notions_conservees = [
+                    n for n in st.session_state.notion_ls 
+                    if n not in st.session_state.notions_supprimees
+                ]
+                
+                col1, col2, col3 = st.columns([2, 2, 1])
+                
+                with col1:
+                    st.metric("Notions totales", len(st.session_state.notion_ls))
+                with col2:
+                    st.metric("Notions conservées", len(notions_conservees))
+                with col3:
+                    st.metric("Supprimées", len(st.session_state.notions_supprimees))
+ 
+                # Bouton de validation finale
+                if st.button("🎯 Valider la sélection et générer le document", type="primary", use_container_width=True):
+                    if len(notions_conservees) == 0:
+                        st.error("⚠️ Tu dois conserver au moins une notion !")
+                    else:
+                        # Surligner dans le RONEO
+                        roneo_final_path = os.path.join(tmpdir, f"NEW_{roneo_file.name}")
+                        surligner_mots(roneo_path, notions_conservees, roneo_final_path)
+ 
+                        # Lire le fichier en binaire
+                        with open(roneo_final_path, "rb") as f:
+                            data = f.read()
+ 
+                        st.success("✅ Document généré avec succès !")
+                        
+                        # Afficher les notions conservées
+                        with st.expander("📌 Notions conservées dans le document"):
+                            for notion in notions_conservees:
+                                st.write(f"• {notion}")
+ 
+                        # Bouton de téléchargement
+                        st.download_button(
+                            label="💾 Télécharger le fichier Word surligné",
+                            data=data,
+                            file_name=f"NEW_{roneo_file.name}",
+                            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                            use_container_width=True
+                        )
 
 
 else :
