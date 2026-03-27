@@ -301,11 +301,11 @@ if st.session_state.authenticated :
                         is_supprimee = notion in st.session_state.notions_supprimees
                         
                         if is_supprimee:
-                            button_type = "secondary"
+                            #button_type = "secondary"
                             emoji = "🗑️"
                             label = f"{emoji} ~~{notion}~~"
                         else:
-                            button_type = "primary"
+                            #button_type = "primary"
                             emoji = "✅"
                             label = f"{emoji} {notion}"
                         
@@ -313,7 +313,6 @@ if st.session_state.authenticated :
                         if st.button(
                             label,
                             key=f"notion_{idx}",
-                            type=button_type,
                             use_container_width=True
                         ):
                             # Toggle : ajouter ou retirer de l'ensemble
@@ -343,7 +342,7 @@ if st.session_state.authenticated :
                     st.metric("Supprimées", len(st.session_state.notions_supprimees))
  
                 # Bouton de validation finale
-                if st.button("🎯 Valider la sélection et générer le document", type="primary", use_container_width=True):
+                if st.button("🎯 Valider la sélection et générer le document", use_container_width=True):
                     if len(notions_conservees) == 0:
                         st.error("⚠️ Tu dois conserver au moins une notion !")
                     else:
