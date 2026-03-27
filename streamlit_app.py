@@ -23,18 +23,6 @@ st.set_page_config(
 if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
 
-if roneo_file and annales_file:
-    # SAUVEGARDER LE CONTENU ET LE NOM DES FICHIER SI ILS SONT OK
-    if "roneo_file_name" not in st.session_state:
-        st.session_state.roneo_file_name = roneo_file.name
-    if "annales_file_name" not in st.session_state:
-        st.session_state.annales_file_name = annales_file.name
-    # 🔑 SAUVEGARDER LE CONTENU DES FICHIERS
-    if "roneo_file_bytes" not in st.session_state:
-        st.session_state.roneo_file_bytes = roneo_file.getvalue()
-    if "annales_file_bytes" not in st.session_state:
-        st.session_state.annales_file_bytes = annales_file.getvalue()
-
 if st.session_state.authenticated :
 
     st.title("📄 Détection d'annales dans un ronéo")
