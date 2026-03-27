@@ -262,30 +262,8 @@ if st.session_state.authenticated :
                 st.session_state.ia_done = True  # Flag pour indiquer que l'IA a terminé
             
             # 🔹 SECTION DE TRI (en dehors du bouton Valider)
-            """
-            if st.session_state.index >= len(st.session_state.notion_ls):
-                    st.success("✅ Tri terminé !")
-
-                    st.write("### 📌 Liste conservée :")
-                    st.write(st.session_state.selection)
-
-                    #Surligner dans le RONEO
-                    roneo_final_path = os.path.join(tmpdir, f"NEW_{roneo_file.name}")
-                    surligner_mots(roneo_path, st.session_state.selection, roneo_final_path)
-
-                    # Lire le fichier en binaire
-                    with open(roneo_final_path, "rb") as f:
-                        data = f.read()
-
-                    # Bouton de téléchargement
-                    st.download_button(
-                        label="💾 Télécharger le fichier Word",
-                        data=data,
-                        file_name=f"NEW_{roneo_file.name}",  # Nom que verra l'utilisateur
-                        mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                    )
-
-            """
+            
+            #L'IA a fini son travail
             if "ia_done" in st.session_state and st.session_state.ia_done:
                 st.title("🧠 Tri des notions")
                 st.caption("Clique sur les notions à **supprimer** (elles passeront en rouge)")
@@ -304,14 +282,9 @@ if st.session_state.authenticated :
                         border-radius: 8px;
                         border: 2px solid #ddd;
                         background-color: white;
-                        transition: all 0.3s ease;
                         text-align: center;
                         font-size: 14px;
                         cursor: pointer;
-                    }
-                    div[data-testid="column"] button:hover {
-                        border-color: #999;
-                        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
                     }
                     </style>
                 """, unsafe_allow_html=True)
@@ -319,7 +292,7 @@ if st.session_state.authenticated :
                 # Afficher les notions en grille 2 colonnes
                 cols = st.columns(2)
                 
-                for idx, notion in enumerate(st.session_state.notion_ls):
+                for idx, notion in enumerate(st.session_state.notion_ls): #enumerta -> INDEX ; TERME
                     col = cols[idx % 2]
                     
                     with col:
@@ -335,7 +308,7 @@ if st.session_state.authenticated :
                             emoji = "✅"
                             label = f"{emoji} {notion}"
                         
-                        # Bouton toggle
+                        # Bouton ajout et 
                         if st.button(
                             label,
                             key=f"notion_{idx}",
@@ -358,7 +331,7 @@ if st.session_state.authenticated :
                     if n not in st.session_state.notions_supprimees
                 ]
                 
-                col1, col2, col3 = st.columns([2, 2, 1])
+                    
                 
                 with col1:
                     st.metric("Notions totales", len(st.session_state.notion_ls))
@@ -373,7 +346,7 @@ if st.session_state.authenticated :
                         st.error("⚠️ Tu dois conserver au moins une notion !")
                     else:
                         # Surligner dans le RONEO
-                        roneo_final_path = os.path.join(tmpdir, f"NEW_{roneo_file.name}")
+                        roneo_final_path = os.path.join(tmpdir, f"NEW_{st.session_state.roneo_file_name}")
                         surligner_mots(roneo_path, notions_conservees, roneo_final_path)
  
                         # Lire le fichier en binaire
@@ -391,11 +364,10 @@ if st.session_state.authenticated :
                         st.download_button(
                             label="💾 Télécharger le fichier Word surligné",
                             data=data,
-                            file_name=f"NEW_{roneo_file.name}",
+                            file_name=f"NEW_{st.session_state.roneo_file_name}",
                             mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                             use_container_width=True
                         )
-
 
 else :
     #Mot de passe
