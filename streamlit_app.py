@@ -96,7 +96,7 @@ if st.session_state.authenticated :
                 f.write(st.session_state.annales_file_bytes)
 
             # Lance l'analyse (mise en cache pour éviter de ré-analyser à chaque interaction)
-            @st.cache_data(show_spinner="Analyse en cours…")
+            #@st.cache_data(show_spinner="Analyse en cours…")
             
             # --- Transformer le cours docx en cours txt ---
             def remove_espace(txt):
@@ -126,7 +126,8 @@ if st.session_state.authenticated :
                     f2.write(cours_txt)
                 return result_path
 
-            roneo_txt_path = docx_to_txt(roneo_path,"roneo_txt.txt")
+            roneo_txt_path = docx_to_structured_txt(roneo_path, os.path.join(tmpdir, "roneo_txt.txt"))
+            #roneo_txt_path = docx_to_txt(roneo_path,"roneo_txt.txt")
             print(roneo_txt_path)
 
             # --- Transformer les annales pdf en annales txt ---
