@@ -130,9 +130,9 @@ mot_avant [AN]passage[/AN] mot_après
 (Un passage par ligne, sans numérotation, sans explication supplémentaire)
 """
 
+#Nouveau prompt
 
-
-PROMPT_UNIQUE_V2 = """Tu es un expert pédagogique médical/scientifique/mathématique spécialisé dans l'analyse de correspondance annales-cours.
+PROMPT_UNIQUE_OKIII = """Tu es un expert pédagogique médical/scientifique/mathématique spécialisé dans l'analyse de correspondance annales-cours.
 
 FICHIERS FOURNIS :
 - annales.txt : questions d'examen avec leurs corrections

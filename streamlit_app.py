@@ -10,6 +10,8 @@ from surligner import *
 from conversion import *
 from prompt import *
 
+st.write(PROMPT_UNIQUE_OKIII)
+
 # ─────────────────────────────────────────────
 # Interface Streamlit
 # ─────────────────────────────────────────────
@@ -191,9 +193,8 @@ if st.session_state.authenticated :
                     ]
                 )
 
-            st.caption('Sélectionne ton prompt')
             pt_choix = st.selectbox(
-                    "Choisis le modèle Claude :",
+                    "Sélectionne ton prompt",
                     [
                         "pt1",
                         "pt2",
@@ -209,7 +210,7 @@ if st.session_state.authenticated :
             elif pt_choix=="pt2":
                 prompt = st.text_area(
                     "Prompt :",
-                    value=PROMPT_UNIQUE_V2,
+                    value=PROMPT_UNIQUE_OKIII,
                     height=300
                 )
 
