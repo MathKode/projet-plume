@@ -99,36 +99,8 @@ if st.session_state.authenticated :
             #@st.cache_data(show_spinner="Analyse en cours…")
             
             # --- Transformer le cours docx en cours txt ---
-            def remove_espace(txt):
-                #supprime les trucs en trop
-                t = txt.split('\n')
-                r=[]
-                for i in t:
-                    if i!="":
-                        r.append(i)
-                return "\n".join(r)
-            
-            def docx_to_txt(source_path,result_name):
-                fichier_cours = docx.Document(source_path)
-                cours_txt = ""
-                for p in fichier_cours.paragraphs:
-                    cours_txt+="\n" 
-                    cours_txt += p.text
-                for t in fichier_cours.tables:
-                    for r in t.rows:
-                        for cell in r.cells:
-                            cours_txt+="\n" 
-                            cours_txt += cell.text
-                cours_txt = remove_espace(cours_txt)
-                #print(cours_txt)
-                result_path = os.path.join(tmpdir, result_name)
-                with open(result_path, "w", encoding="utf-8") as f2:
-                    f2.write(cours_txt)
-                return result_path
-
             roneo_txt_path = docx_to_structured_txt(roneo_path, os.path.join(tmpdir, "roneo_txt.txt"))
-            #roneo_txt_path = docx_to_txt(roneo_path,"roneo_txt.txt")
-            print(roneo_txt_path)
+
             with open(roneo_txt_path, "rb") as f:
                 data_ = f.read()
 
@@ -154,8 +126,21 @@ if st.session_state.authenticated :
                     f2.write(txt_annales)
                 return result_path
             
-            annales_txt_path = pdf_to_txt(annales_path,"oki")
+            annales_txt_path = pdf_to_structured_txt(annales_path, os.path.join(tmpdir, "annales_txt.txt"))
+            #annales_txt_path = pdf_to_txt(annales_path,"oki")
             print(annales_txt_path)
+
+            with open(annales_txt_path, "rb") as f:
+                data_ = f.read()
+
+            # Bouton de téléchargement
+            st.download_button(
+                            label="💾 Télécharger le fichier ANNALES TXT intermédiaire (log)",
+                            data=data_,
+                            file_name=f"annales_txt.txt",
+                            mime="text/plain",
+                            use_container_width=True
+            )
 
             
             # Connection à l'IA
