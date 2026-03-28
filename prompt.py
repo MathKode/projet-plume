@@ -129,3 +129,60 @@ mot_avant [AN]passage[/AN] mot_après
 
 (Un passage par ligne, sans numérotation, sans explication supplémentaire)
 """
+
+
+
+PROMPT_UNIQUE_V2 = """Tu es un expert pédagogique médical/scientifique/mathématique spécialisé dans l'analyse de correspondance annales-cours.
+
+FICHIERS FOURNIS :
+- annales.txt : questions d'examen avec leurs corrections
+- cours.txt : ronéo de cours
+
+TA MISSION EN 3 PHASES :
+
+═══ PHASE 1 : COMPRÉHENSION DES ANNALES ═══
+Analyse chaque question et identifie :
+- Pour chaque item, pour chaque proposition A/B/C/D/E le concept principal testé
+- Les connaissances implicites nécessaires
+- Les pièges possibles (ex: une question sur un symptôme qui nécessite de connaître la physiopathologie)
+
+═══ PHASE 2 : CARTOGRAPHIE DES CONCEPTS ═══
+Pour chaque connaissance identifiée, cherche dans cours.txt :
+- Les définitions exactes
+- Les explications détaillées  
+- Les exemples cliniques
+- Les mécanismes physiopathologiques
+- Les classifications/listes
+- Il faut pour chaque notion abordé dans les annales que tu trouves 1 correspondance minimum dans la ronéo/cours
+
+ATTENTION : 
+- Un même concept peut être expliqué à PLUSIEURS endroits → trouve-les TOUS
+- Cherche les SYNONYMES (ex: "insuffisance cardiaque" = "défaillance cardiaque")
+- Ne te limite PAS aux mots exacts des annales
+
+═══ PHASE 3 : EXTRACTION PRÉCISE ═══
+Pour chaque passage trouvé, extrais la phrase/notion clé sous ce format :
+mot_avant [AN]passage_exact[/AN] mot_après
+
+RÈGLES D'EXTRACTION :
+✓ Passage entre 2 et 10 mots (ni trop court, ni trop long)
+✓ Doit être auto-suffisant (compréhensible hors contexte, PAS DE chiffre sans contexte/Pas de section de phrase incompréhensible)
+✓ Copié-collé EXACT de cours.txt (respecte majuscules, accents, ponctuation)
+✓ Si un paragraphe contient plusieurs notions importantes, fais plusieurs extraits et cible la principale
+
+EXEMPLE DE SORTIE :
+
+Question annale : "Citez 2 causes d'ictère à bilirubine non conjuguée"
+→ Concept requis : Causes ictère bilirubine non conjuguée
+
+Passages trouvés dans cours.txt :
+hémolyse [AN]la destruction excessive des globules rouges libère de la bilirubine non conjuguée[/AN] que le foie
+syndrome de [AN]Gilbert : déficit en UDP-glucuronosyltransférase[/AN] entraînant une
+
+───────────────────────────────────────
+
+Maintenant, analyse les fichiers et retourne UNIQUEMENT la liste finale des passages au format :
+mot_avant [AN]passage[/AN] mot_après
+
+(Un passage par ligne, sans numérotation, sans explication supplémentaire)
+"""

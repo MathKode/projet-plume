@@ -191,25 +191,27 @@ if st.session_state.authenticated :
                     ]
                 )
 
+            st.caption('Sélectionne ton prompt')
+            pt_choix = st.selectbox(
+                    "Choisis le modèle Claude :",
+                    [
+                        "pt1",
+                        "pt2",
+                    ]
+                )
             # 3. Zone de prompt (modifiable)
-            pt = """Tu as pour mission d'identifier dans les cours (fichier cours.txt) les connaissances requises pour répondre annales (annales.txt).
-
-            Fichiers :
-            - Un fichier annales.txt contenant les annales tombées au concours et leur correction
-            - Un fichier cours.txt contenant un cours dans lequel on cherche les notions demandé le jour de l'examen
-
-            Consignes :
-            - Rescencer dans le cours des mots ou bout de phrase essentiel à connaître pour répondre aux annales.
-            - Relever les passages exactes du cours
-
-            Format de sortie :
-            Liste courte, chaque élément = 1 notion (3 à 6 mots max qui correspondent exactement à ce qui est écrit dans cours.txt) avec, pour faciliter le repérage, le mot précédant + [AN] + notion + [/AN] + mot suivant. J'attends une liste sans ajout autre.
-            """
-            prompt = st.text_area(
-                "Prompt :",
-                value=PROMPT_UNIQUE_AMELIORE,
-                height=300
-            )
+            if pt_choix=="pt1":
+                prompt = st.text_area(
+                    "Prompt :",
+                    value=PROMPT_UNIQUE_AMELIORE,
+                    height=300
+                )
+            elif pt_choix=="pt2":
+                prompt = st.text_area(
+                    "Prompt :",
+                    value=PROMPT_UNIQUE_V2,
+                    height=300
+                )
 
             # 4. Bouton valider
             if st.button("🚀 Valider"):
