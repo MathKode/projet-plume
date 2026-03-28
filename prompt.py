@@ -186,3 +186,187 @@ mot_avant [AN]passage[/AN] mot_après
 
 (Un passage par ligne, sans numérotation, sans explication supplémentaire)
 """
+
+
+# PROMPT OPTIMISÉ - VERSION ANTI-BRUIT
+
+PROMPT_V2_ANTI_BRUIT = """Tu es un expert pédagogique médical spécialisé dans l'analyse de correspondance annales-cours.
+
+FICHIERS FOURNIS :
+- annales.txt : questions d'examen avec leurs corrections
+- cours.txt : ronéo de cours
+
+═══════════════════════════════════════════════════════════
+PHASE 1 : IDENTIFICATION DES CONCEPTS CLÉS
+═══════════════════════════════════════════════════════════
+
+Pour chaque question des annales, identifie :
+- Les concepts **généraux** nécessaires pour répondre (pas les exemples spécifiques)
+- Les définitions théoriques indispensables
+- Les mécanismes fondamentaux
+
+⚠️ EXCLUSIONS STRICTES :
+- Ne retiens PAS les exemples illustratifs ("c'est la représentation de X")
+- Ne retiens PAS les calculs numériques spécifiques ("pI = 6,1")
+- Ne retiens PAS les cas particuliers ("l'acide glutamique a un pI = 3,25")
+
+═══════════════════════════════════════════════════════════
+PHASE 2 : RECHERCHE DANS LE COURS
+═══════════════════════════════════════════════════════════
+
+Pour chaque concept identifié, trouve dans cours.txt :
+✓ Les DÉFINITIONS générales
+✓ Les RÈGLES fondamentales
+✓ Les MÉCANISMES explicatifs
+✓ Les CLASSIFICATIONS importantes
+
+✗ IGNORE :
+✗ Les exemples chiffrés isolés
+✗ Les références à des figures/schémas
+✗ Les anecdotes ("quand on se mouille les cheveux...")
+
+═══════════════════════════════════════════════════════════
+PHASE 3 : EXTRACTION INTELLIGENTE
+═══════════════════════════════════════════════════════════
+
+RÈGLES D'OR POUR L'EXTRACTION :
+
+1️⃣ LONGUEUR : 3 à 10 mots minimum
+   → Assez long pour être compréhensible seul
+
+2️⃣ AUTO-SUFFISANCE : Le passage doit pouvoir être lu HORS CONTEXTE
+   ✓ Bon : "Les liaisons hydrogènes sont établies entre les résidus i et i+4"
+   ✗ Mauvais : "entre les résidus i et i+4" (incomplet)
+   ✗ Mauvais : "il a charge -1" (pronom sans antécédent)
+
+3️⃣ COMPLÉTUDE GRAMMATICALE :
+   ✓ Sujet + Verbe + Complément complet
+   ✗ Pas de fragments de phrases
+   ✗ Pas de pronoms isolés (il, elle, ce, cela...)
+
+4️⃣ VALEUR PÉDAGOGIQUE :
+   ✓ Définitions, règles, mécanismes
+   ✗ Exemples numériques isolés
+   ✗ Phrases de transition ("voyons maintenant...")
+
+5️⃣ CONTEXTUALISATION :
+   Si le passage contient un pronom (il, elle, cela...), inclus le nom auquel il se réfère.
+   Exemple : 
+   ✗ "il déstabilise l'hélice alpha" 
+   ✓ "L'acide aspartique déstabilise l'hélice alpha"
+
+═══════════════════════════════════════════════════════════
+TESTS DE VALIDATION AVANT EXTRACTION
+═══════════════════════════════════════════════════════════
+
+Avant d'extraire un passage, vérifie TOUTES ces conditions :
+
+□ Le passage fait au moins 3 mots ?
+□ Il contient un verbe conjugué ?
+□ Il est compréhensible SANS lire ce qui précède/suit ?
+□ Il n'y a PAS de pronoms sans référent explicite ?
+□ Ce n'est PAS un exemple chiffré isolé ?
+□ Ce n'est PAS une référence à une figure/image ?
+□ Cela exprime une RÈGLE ou DÉFINITION générale ?
+
+Si l'une de ces conditions échoue → NE PAS EXTRAIRE
+
+═══════════════════════════════════════════════════════════
+FORMAT DE SORTIE
+═══════════════════════════════════════════════════════════
+
+Retourne UNIQUEMENT les passages validés au format :
+mot_avant [AN]passage_exact[/AN] mot_après
+
+EXEMPLES DE BONNES EXTRACTIONS :
+-----------------------------------
+cohésive grâce à [AN]des liaisons hydrogènes qui doivent être fournies par les atomes qui constituent la liaison peptidique[/AN] ce sont les
+
+ramifié sur le [AN]carbone beta comme la valine et l'isoleucine ainsi que les acides aminés impliqués dans des liaisons hydrogène déstabilisent les hélices alpha[/AN] La valine
+
+antiparallèles sont [AN]les plus stables car les atomes impliqués dans la formation des liaisons hydrogènes sont alignés[/AN] ce qui confère
+
+EXEMPLES DE MAUVAISES EXTRACTIONS (À ÉVITER) :
+----------------------------------------------
+✗ représentation de [AN]la myoglobine[/AN] elle est
+   → Référence à un exemple visuel, pas une connaissance
+
+✗ pH = 5, [AN]il a charge -1[/AN] donc
+   → Pronom "il" sans référent, incompréhensible seul
+
+✗ extrémité [AN]C-terminale[/AN] de la protéine
+   → Fragment trop court, sans contexte
+
+✗ l'acide glutamique [AN]a un pI = 3,25[/AN] tandis que
+   → Valeur numérique spécifique, pas une règle générale
+
+═══════════════════════════════════════════════════════════
+MAINTENANT, ANALYSE LES FICHIERS
+═══════════════════════════════════════════════════════════
+
+Applique rigoureusement ces règles et retourne UNIQUEMENT les passages validés.
+"""
+
+
+# PROMPT AVEC ÉTAPE DE RAISONNEMENT (pour forcer la réflexion)
+
+PROMPT_V2_AVEC_RAISONNEMENT = """Tu es un expert pédagogique médical spécialisé dans l'analyse de correspondance annales-cours.
+
+FICHIERS FOURNIS :
+- annales.txt : questions d'examen avec leurs corrections
+- cours.txt : ronéo de cours
+
+═══════════════════════════════════════════════════════════
+MÉTHODOLOGIE EN 2 ÉTAPES
+═══════════════════════════════════════════════════════════
+
+ÉTAPE 1 : ANALYSE ET RAISONNEMENT (visible dans ta réponse)
+------------------------------------------------------------
+
+Pour chaque question des annales, rédige une analyse structurée :
+
+**Question N°X : [résumé]**
+
+Concepts généraux requis :
+- [Concept 1] : [pourquoi c'est une règle générale et non un exemple]
+- [Concept 2] : [pourquoi c'est essentiel pour comprendre]
+
+Passages trouvés dans le cours :
+1. "[extrait candidat 1]"
+   ✓ Validation : Auto-suffisant ? Oui/Non
+   ✓ Contient une règle générale ? Oui/Non
+   ✓ Longueur > 8 mots ? Oui/Non
+   → DÉCISION : RETENU / REJETÉ
+
+2. "[extrait candidat 2]"
+   ✓ Validation : Auto-suffisant ? Oui/Non
+   ...
+   → DÉCISION : RETENU / REJETÉ
+
+---
+
+ÉTAPE 2 : SORTIE FINALE (après toutes les analyses)
+----------------------------------------------------
+
+Une fois toutes les questions analysées, retourne UNIQUEMENT les passages RETENUS :
+
+[AN]passage_1[/AN]
+[AN]passage_2[/AN]
+[AN]passage_3[/AN]
+...
+
+═══════════════════════════════════════════════════════════
+CRITÈRES DE VALIDATION (rappel)
+═══════════════════════════════════════════════════════════
+
+Un passage est RETENU si et seulement si :
+✓ 3-10 mots
+✓ Phrase complète (sujet + verbe + complément)
+✓ Compréhensible HORS CONTEXTE
+✓ Exprime une RÈGLE/DÉFINITION générale
+✓ Pas de pronoms sans référent (il, elle, cela...)
+✓ Pas d'exemple chiffré isolé
+✓ Pas de référence à figure/schéma
+
+Maintenant, analyse les fichiers.
+"""

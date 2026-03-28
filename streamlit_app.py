@@ -196,6 +196,7 @@ if st.session_state.authenticated :
                     [
                         "pt1",
                         "pt2",
+                        "pt3",
                     ]
                 )
             # 3. Zone de prompt (modifiable)
@@ -211,6 +212,15 @@ if st.session_state.authenticated :
                     value=PROMPT_UNIQUE_OKIII,
                     height=300
                 )
+            elif pt_choix=="pt3":
+                prompt = st.text_area(
+                    "Prompt :",
+                    value=PROMPT_V2_ANTI_BRUIT,
+                    height=300
+                )
+
+
+            # PROMPT_V2_ANTI_BRUIT
 
             # 4. Bouton valider
             if st.button("🚀 Valider"):
