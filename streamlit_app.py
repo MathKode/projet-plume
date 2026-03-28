@@ -129,13 +129,13 @@ if st.session_state.authenticated :
             roneo_txt_path = docx_to_structured_txt(roneo_path, os.path.join(tmpdir, "roneo_txt.txt"))
             #roneo_txt_path = docx_to_txt(roneo_path,"roneo_txt.txt")
             print(roneo_txt_path)
-            with open(roneo_final_path, "rb") as f:
-                data = f.read()
+            with open(roneo_txt_path, "rb") as f:
+                data_ = f.read()
 
             # Bouton de téléchargement
             st.download_button(
                             label="💾 Télécharger le fichier Word TXT intermédiaire (log)",
-                            data=data,
+                            data=data_,
                             file_name=f"roneo_txt.txt",
                             mime="text/plain",
                             use_container_width=True
