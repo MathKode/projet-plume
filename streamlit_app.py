@@ -10,8 +10,6 @@ from surligner import *
 from conversion import *
 from prompt import *
 
-st.write(PROMPT_UNIQUE_OKIII)
-
 # ─────────────────────────────────────────────
 # Interface Streamlit
 # ─────────────────────────────────────────────
