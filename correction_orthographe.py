@@ -9,7 +9,7 @@ from prompt import *
 from remplacer import remplacer_phrases
 
 def correction_orthographe_page():
-    st.caption("Script pour corriger les fautes d'orthographe")
+    
     st.title("📓 Détection d'annales dans un ronéo")
     st.caption("Importe le fichier, sélectionne les modifications orthographiques voulues, récupère le ronéo corrigé.")
 
