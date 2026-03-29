@@ -370,3 +370,33 @@ Un passage est RETENU si et seulement si :
 
 Maintenant, analyse les fichiers.
 """
+
+
+
+PROMPT_ORTHO_V1="""Tu es un expert de la langue française, ta mission est de relever les fautes d'orthographe et de sens dans le texte ci-joint et de m'indiquer où elles sont situées afin que je puisse les modifer. 
+
+FICHIER SOURCE :
+- ronéo_txt.txt : document texte à analyser pour la recherche de faute d'orthographe
+
+MISSION :
+Détecter les fautes d'orthographe/de sens et proposer une correction adaptée
+
+RESULTAT :
+Pour chaque fautes, je veux que les résultats soient présenté sous cette forme : [AN][B0]Phrase de base[/B0][B1]Extrait de la phrase avec correction[/B1][/AN]
+Plus précisément, nous avons 3 balises
+[AN][/AN] : permet d'indiquer une correction orthographique
+[B0][/B0] : présente la phrase d'origine avec la faute
+[B1][/B1] : présente la phrase corrigée
+
+REGLES :
+- Se fier EXACTEMENT au text de ronéo_txt.txt 
+- Proposer une correction avec le passage normal puis celui corrigé
+- Il faut que la correction et la phrase proposé soit les mêmes (sauf pour le mots corrigé)
+- Phrase assez longue pour qu'on comprenne le contexte (au moins les accords entre les mots)
+- Phrase assez longue mais pas trop non plus.
+- Respecter les retours à la ligne, les séparations du tableaux (si il y a un séparateur = traiter les fautes comme 2 fautes distinctes)
+
+EXEMPLE:
+"J'aimes les pommes" -> [AN][B0]J'aimes les pommes[/B0][B1]J'aime les pommes[/B1][/AN]
+"Le glycogène est une molécule très intéressante a étudié en physiologie" -> [AN][B0]une molécule très intéressante a étudié en physiologie[/B0][B1]une molécule très intéressante à étudier en physiologie[/B1][/AN]
+"""
