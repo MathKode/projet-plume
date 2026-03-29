@@ -189,8 +189,9 @@ def correction_orthographe_page():
                 
                 # 🔹 SECTION DE TRI (en dehors du bouton Valider)
                 
-
-                if st.session_state.ia_done :
+                
+                if "ia_done" in st.session_state and st.session_state.ia_done:
+                    st.write("fini")
                     if st.button("🎯 Appliquer les corrections", use_container_width=True):
                         # Préparer la liste des corrections
                         corrections = []
