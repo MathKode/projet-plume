@@ -166,12 +166,18 @@ def correction_orthographe_page():
                             j = i.split('[AN]')
                             if len(j)>1:
                                 notion = j[1].split('[/AN]')[0]
+                                #Découpe phrase de base/phrase modif
+                                b0 = notion.split('[B0]')[1].split('[/B0]')[0]
+                                b1 = notion.split('[B1]')[1].split('[/B1]')[1]
+
                                 #retire les espaces si jamais au début et à la fin
-                                if notion[0] == " ": notion = notion[1:]
-                                if notion[-1] == " ": notion = notion[:-1]
+                                for vr in [b0,b1]:
+                                    if vr[0] == " ": vr = vr[1:]
+                                    if vr[-1] == " ": vr = vr[:-1]
                                 
-                                if notion not in notions_ls_var:
-                                    notions_ls_var.append(notion)
+                                n_result = [str(b0), str(b1)]
+                                if n_result not in notions_ls_var:
+                                    notions_ls_var.append(n_result)
                                     
                         return notions_ls_var
                     
