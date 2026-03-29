@@ -195,7 +195,7 @@ def correction_orthographe_page():
                     if st.button("🎯 Appliquer les corrections", use_container_width=True):
                         # Préparer la liste des corrections
                         corrections = []
-                        for notion in notions_conservees:  # ou st.session_state.notion_ls si vous gardez tout
+                        for notion in st.session_state.notion_ls:  # ou st.session_state.notion_ls si vous gardez tout
                             # notion est au format [phrase_avant, phrase_apres]
                             corrections.append(notion)
                         
