@@ -168,7 +168,7 @@ def correction_orthographe_page():
                                 notion = j[1].split('[/AN]')[0]
                                 #Découpe phrase de base/phrase modif
                                 b0 = notion.split('[B0]')[1].split('[/B0]')[0].strip()
-                                b1 = notion.split('[B1]')[1].split('[/B1]')[1].strip()
+                                b1 = notion.split('[B1]')[1].split('[/B1]')[0].strip()
                                 
                                 n_result = [str(b0), str(b1)]
                                 if n_result not in notions_ls_var:

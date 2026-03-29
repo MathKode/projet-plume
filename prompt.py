@@ -395,6 +395,7 @@ REGLES :
 - Phrase assez longue pour qu'on comprenne le contexte (au moins les accords entre les mots)
 - Phrase assez longue mais pas trop non plus.
 - Respecter les retours à la ligne, les séparations du tableaux (si il y a un séparateur = traiter les fautes comme 2 fautes distinctes)
+- Pas de phrase d'introduction
 
 EXEMPLE:
 "J'aimes les pommes" -> [AN][B0]J'aimes les pommes[/B0][B1]J'aime les pommes[/B1][/AN]
