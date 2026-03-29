@@ -10,7 +10,7 @@ from remplacer import remplacer_phrases
 
 def correction_orthographe_page():
     
-    st.title("📓 Détection d'annales dans un ronéo")
+    st.title("📓 Détection des fautes d'orthographe dans un ronéo")
     st.caption("Importe le fichier, sélectionne les modifications orthographiques voulues, récupère le ronéo corrigé.")
 
     # ── Étape 1 : Upload du fichiers ───
