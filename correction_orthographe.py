@@ -1,5 +1,11 @@
 import streamlit as st
 from conversion import *
+import tempfile
+import os
+from pathlib import Path
+from IA.Anthropic_connection import *
+from IA.OpenIA_connection import *
+from prompt import *
 
 def correction_orthographe_page():
     st.caption("Script pour corriger les fautes d'orthographe")
