@@ -109,6 +109,7 @@ def correction_orthographe_page():
                             "pt1",
                         ]
                     )
+            if True:
                 # 3. Zone de prompt (modifiable)
                 if pt_choix=="pt1":
                     prompt = st.text_area(
