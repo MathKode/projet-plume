@@ -6,6 +6,7 @@ from pathlib import Path
 from IA.Anthropic_connection import *
 from IA.OpenIA_connection import *
 from prompt import *
+from remplacer import remplacer_phrases
 
 def correction_orthographe_page():
     st.caption("Script pour corriger les fautes d'orthographe")
@@ -188,6 +189,33 @@ def correction_orthographe_page():
                 
                 # 🔹 SECTION DE TRI (en dehors du bouton Valider)
                 
+
+                if st.session_state.ia_done :
+                    if st.button("🎯 Appliquer les corrections", use_container_width=True):
+                        # Préparer la liste des corrections
+                        corrections = []
+                        for notion in notions_conservees:  # ou st.session_state.notion_ls si vous gardez tout
+                            # notion est au format [phrase_avant, phrase_apres]
+                            corrections.append(notion)
+                        
+                        # Appliquer les corrections
+                        roneo_corrige_path = os.path.join(tmpdir, f"CORRIGE_{st.session_state.roneo_file_name}")
+                        stats = remplacer_phrases(roneo_path, corrections, roneo_corrige_path)
+                        
+                        # Afficher les stats
+                        st.success(f"✅ {stats['remplacements_effectues']} corrections effectuées !")
+                        st.info(f"📝 {stats['paragraphes_modifies']} paragraphes modifiés")
+                        
+                        # Téléchargement
+                        with open(roneo_corrige_path, "rb") as f:
+                            data = f.read()
+                        
+                        st.download_button(
+                            label="💾 Télécharger le ronéo corrigé",
+                            data=data,
+                            file_name=f"CORRIGE_{st.session_state.roneo_file_name}",
+                            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                        )
             
     else:
         st.info("Importe le fichier pour démarrer l'analyse.", icon="ℹ️")
