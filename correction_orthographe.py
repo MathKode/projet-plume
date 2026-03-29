@@ -171,7 +171,7 @@ def correction_orthographe_page():
                                 b1 = notion.split('[B1]')[1].split('[/B1]')[0].strip()
                                 
                                 n_result = [str(b0), str(b1)]
-                                if n_result not in notions_ls_var:
+                                if n_result not in notions_ls_var and b0 != b1:
                                     notions_ls_var.append(n_result)
                                     
                         return notions_ls_var
