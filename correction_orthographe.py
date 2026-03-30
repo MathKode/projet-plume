@@ -188,7 +188,22 @@ def correction_orthographe_page():
                     st.session_state.ia_done = True  # Flag pour indiquer que l'IA a terminé
                 
                 # 🔹 SECTION DE TRI (en dehors du bouton Valider)
+                def modif(d1, d2):
+                    #mot après mot
+                    d2_ls=d2.split(' ')
+                    changement_d1 = ""
+                    for i in d1.split(' '):
+                            if i not in d2_ls:
+                                changement_d1 = changement_d1 + f"#{i}#"
+                    d1_ls=d1.split(' ')
+                    changement_d2 = ""
+                    for i in d2.split(' '):
+                            if i not in d1_ls:
+                                changement_d2 = changement_d2 + f"#{i}#"
+                    return changement_d1, changement_d2
                 
+                for i in st.session_state.notion_ls:
+                    st.button(f"{modif(i[0],i[1])}")
                 
                 if "ia_done" in st.session_state and st.session_state.ia_done:
                     st.write("fini")
