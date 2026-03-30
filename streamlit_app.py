@@ -344,6 +344,7 @@ if st.session_state.authenticated :
                         else:
                             # Surligner dans le RONEO
                             roneo_final_path = os.path.join(tmpdir, f"NEW_{st.session_state.roneo_file_name}")
+                            st.write(notions_conservees)
                             surligner_mots(roneo_path, notions_conservees, roneo_final_path)
     
                             # Lire le fichier en binaire
