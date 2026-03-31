@@ -215,7 +215,7 @@ def correction_orthographe_page():
 
                     idn=0
                     for i in st.session_state.notion_ls:
-                        is_supprimee = i in st.session_state.correction_supprimees
+                        is_supprimee = str(i) in st.session_state.correction_supprimees
                         
                         if is_supprimee:
                             #button_type = "secondary"
@@ -231,9 +231,9 @@ def correction_orthographe_page():
                                    use_container_width=True
                         ):
                             if is_supprimee:
-                                st.session_state.correction_supprimees.discard(i)
+                                st.session_state.correction_supprimees.discard(str(i))
                             else:
-                                st.session_state.correction_supprimees.add(i)
+                                st.session_state.correction_supprimees.add(str(i))
                             st.rerun()
                         
                         idn+=1
