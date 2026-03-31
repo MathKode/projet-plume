@@ -240,6 +240,23 @@ def correction_orthographe_page():
                         idn+=1
 
                     st.write("fini")
+                    
+                    notions_conservees = [
+                        n for n in st.session_state.notion_ls 
+                        if str(n) not in st.session_state.correction_supprimees
+                    ]
+                    
+                    col1, col2, col3 = st.columns([2, 2, 1])
+                        
+                    
+                    with col1:
+                        st.metric("Notions totales", len(st.session_state.notion_ls))
+                    with col2:
+                        st.metric("Notions conservées", len(notions_conservees))
+                    with col3:
+                        st.metric("Supprimées", len(st.session_state.notions_supprimees))
+    
+
                     if st.button("🎯 Appliquer les corrections", use_container_width=True):
                         # Préparer la liste des corrections
                         corrections = []
@@ -248,6 +265,11 @@ def correction_orthographe_page():
                             if str(notion) not in st.session_state.correction_supprimees:
                                 corrections.append(notion)
                         
+                        # Afficher les notions conservées
+                        with st.expander("📌 Notions conservées dans le document"):
+                            for notion in Corrections:
+                                st.write(f"• {str(notion)}")
+
                         # Appliquer les corrections
                         roneo_corrige_path = os.path.join(tmpdir, f"CORRIGE_{st.session_state.roneo_file_name}")
                         stats = remplacer_phrases(roneo_path, corrections, roneo_corrige_path)
