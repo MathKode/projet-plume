@@ -267,7 +267,7 @@ def correction_orthographe_page():
                         
                         # Afficher les notions conservées
                         with st.expander("📌 Notions conservées dans le document"):
-                            for notion in Corrections:
+                            for notion in corrections:
                                 st.write(f"• {str(notion)}")
 
                         # Appliquer les corrections
