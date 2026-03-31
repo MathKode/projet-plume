@@ -254,7 +254,7 @@ def correction_orthographe_page():
                     with col2:
                         st.metric("Notions conservées", len(notions_conservees))
                     with col3:
-                        st.metric("Supprimées", len(st.session_state.notions_supprimees))
+                        st.metric("Supprimées", len(st.session_state.correction_supprimees))
     
 
                     if st.button("🎯 Appliquer les corrections", use_container_width=True):
