@@ -197,17 +197,17 @@ def correction_orthographe_page():
                         d2_ls=d2.split(' ')
                         changement_d1 = ""
                         for i in d1.split(' '):
-                                if i not in d2_ls:
-                                    changement_d1 = changement_d1 + f" **{i}** "
-                                else :
-                                    changement_d1 = changement_d1 + f" {i} "
+                            if i not in d2_ls:
+                                changement_d1 = changement_d1 + f" **{i}** "
+                            else :
+                                changement_d1 = changement_d1 + f" {i} "
                         d1_ls=d1.split(' ')
                         changement_d2 = ""
                         for i in d2.split(' '):
-                                if i not in d1_ls:
-                                    changement_d2 = changement_d2 + f" **{i}** "
-                                else :
-                                    changement_d2 = changement_d2 + f" {i} "
+                            if i not in d1_ls:
+                                changement_d2 = changement_d2 + f" **{i}** "
+                            else :
+                                changement_d2 = changement_d2 + f" {i} "
                         return changement_d1, changement_d2
                     
                     if "correction_supprimees" not in st.session_state:
@@ -218,13 +218,13 @@ def correction_orthographe_page():
                         is_supprimee = i in st.session_state.correction_supprimees
                         
                         if is_supprimee:
-                                #button_type = "secondary"
-                                emoji = "🗑️"
-                                label = f"{emoji} ~~{modif(i[0],i[1])}~~"
-                            else:
-                                #button_type = "primary"
-                                emoji = "✅"
-                                label = f"{emoji} {modif(i[0],i[1])}"
+                            #button_type = "secondary"
+                            emoji = "🗑️"
+                            label = f"{emoji} ~~{modif(i[0],i[1])}~~"
+                        else:
+                            #button_type = "primary"
+                            emoji = "✅"
+                            label = f"{emoji} {modif(i[0],i[1])}"
 
                         if st.button(label,
                                    key=f"correction_{idn}",
