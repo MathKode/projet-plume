@@ -208,7 +208,8 @@ def correction_orthographe_page():
                                 changement_d2 = changement_d2 + f" **{i}** "
                             else :
                                 changement_d2 = changement_d2 + f" {i} "
-                        return changement_d1, changement_d2
+
+                        return f"{changement_d1} **->** {changement_d2}"
                     
                     if "correction_supprimees" not in st.session_state:
                         st.session_state.correction_supprimees = set()
@@ -244,7 +245,8 @@ def correction_orthographe_page():
                         corrections = []
                         for notion in st.session_state.notion_ls:  # ou st.session_state.notion_ls si vous gardez tout
                             # notion est au format [phrase_avant, phrase_apres]
-                            corrections.append(notion)
+                            if str(notion) not in st.session_state.correction_supprimees:
+                                corrections.append(notion)
                         
                         # Appliquer les corrections
                         roneo_corrige_path = os.path.join(tmpdir, f"CORRIGE_{st.session_state.roneo_file_name}")
