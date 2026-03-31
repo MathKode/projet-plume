@@ -210,8 +210,24 @@ def correction_orthographe_page():
                                     changement_d2 = changement_d2 + f" {i} "
                         return changement_d1, changement_d2
                     
+                    if "correction_supprimees" not in st.session_state:
+                        st.session_state.correction_supprimees = set()
+
+                    idn=0
                     for i in st.session_state.notion_ls:
-                        st.button(f"{modif(i[0],i[1])}")
+                        is_supprimee = i in st.session_state.correction_supprimees
+
+                        if st.button(f"{modif(i[0],i[1])}",
+                                   key=f"correction_{idn}",
+                                   use_container_width=True
+                        ):
+                            if is_supprimee:
+                                st.session_state.correction_supprimees.discard(i)
+                            else:
+                                st.session_state.correction_supprimees.add(i)
+                            st.rerun()
+                        
+                        idn+=1
 
                     st.write("fini")
                     if st.button("🎯 Appliquer les corrections", use_container_width=True):
