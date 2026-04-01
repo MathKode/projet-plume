@@ -125,6 +125,7 @@ def pdf_to_structured_txt(source_path, result_path, mode):
     doc = pymupdf.open(source_path)
     output_lines = []
     
+    corriger = False
     for page_num, page in enumerate(doc, start=1):
         # Ajouter un marqueur de page
         output_lines.append(f"\n{'─'*60}")
@@ -133,6 +134,8 @@ def pdf_to_structured_txt(source_path, result_path, mode):
         
         # Extraire le texte
         text = page.get_text()
+        if len(text.lower().split('correction')) >= 2:
+            corriger=True
         
         # Détecter les questions (souvent commencent par Q, Question, numéro, etc.)
         lines = text.split('\n')
@@ -146,7 +149,7 @@ def pdf_to_structured_txt(source_path, result_path, mode):
             elif mode == 2:
                 # Critère page de correction :
                 # Si il y a écrit "correction :" alors on ajoute la ligne
-                if len(text.split('Correction :')) == 0:
+                if not corriger:
                     output_lines.append(line)
 
     # Écrire le fichier
@@ -156,4 +159,4 @@ def pdf_to_structured_txt(source_path, result_path, mode):
     return result_path
 
 #docx_to_structured_txt("./ressources/UE6-C8-L1-Oussalah.docx","./v3/test_structured.txt")
-#pdf_to_structured_txt("./ressources/annales_2.pdf","./v3/pdf_test.txt")
+#pdf_to_structured_txt("./ressources/annales_2.pdf","./v3/pdf_test.txt", 2)
