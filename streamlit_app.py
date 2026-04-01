@@ -205,13 +205,14 @@ if st.session_state.authenticated :
                             "claude-haiku-3"
                         ]
                     )
-
+                
                 pt_choix = st.selectbox(
                         "Sélectionne ton prompt",
                         [
                             "pt1",
                             "pt2",
                             "pt3",
+                            "DOUBLE PROMPT 1"
                         ]
                     )
                 
@@ -234,7 +235,28 @@ if st.session_state.authenticated :
                         value=PROMPT_V2_ANTI_BRUIT,
                         height=300
                     )
+                elif pt_choix=="DOUBLE PROMPT 1":
+                    prompt = st.text_area(
+                        "Prompt :",
+                        value=PROMPT_ETAPE_1,
+                        height=300
+                    )
 
+                if nb_prompt == "Double Prompt":
+                    pt_choix2 = st.selectbox(
+                        "Sélectionne ton prompt",
+                        [
+                            "pt1"
+                        ]
+                    )
+                
+                    # 3. Zone de prompt (modifiable)
+                    if pt_choix2=="pt1":
+                        prompt2 = st.text_area(
+                            "Prompt :",
+                            value=PROMPT_ETAPE_2,
+                            height=300
+                        )
 
                 # PROMPT_V2_ANTI_BRUIT
 
@@ -257,9 +279,29 @@ if st.session_state.authenticated :
                         reponse_ia = IA_ask_anthropic(apikey_anthropic,prompt,[annales_txt_id,roneo_txt_id],model)
 
                     st.success("Configuration validée !")
-
                     st.write(reponse_ia)
 
+
+                    if nb_prompt == "Double Prompt":
+                        #Sauvegarde de la réponse de l'IA
+                        reponse_ia_path = os.path.join(tmpdir, "IA_reponse.txt")
+                        with open(reponse_ia_path, 'w') as f:
+                            f.write(reponse_ia)
+                        
+                        #Double prompt = on récupère le résultat précédant et on le renvoit à l'IA avec un nouveau prompt
+                        if provider == "ChatGPT":
+                            #Upload file
+                            reponse_ia_id = IA_upload_openIA(apikey_openia, reponse_ia_path)
+
+                            #Ask IA
+                            reponse_ia = IA_ask_openIA(apikey_openia,prompt2,[annales_txt_id,roneo_txt_id,reponse_ia_id],model)
+                        else :
+                            #Upload file
+                            reponse_ia_id = IA_upload_anthropic(apikey_anthropic, "reponse_ia.txt",reponse_ia_path)
+                            
+                            #Ask IA
+                            reponse_ia = IA_ask_anthropic(apikey_anthropic,prompt2,[annales_txt_id,roneo_txt_id,reponse_ia_id],model)   
+                        st.write(reponse_ia)
                     #Get the roneo txt
                     with open(roneo_txt_path,'r') as f:
                         roneo_txt=f.read()
