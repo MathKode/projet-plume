@@ -113,9 +113,12 @@ def docx_to_structured_txt(source_path, result_path):
    
 
 
-def pdf_to_structured_txt(source_path, result_path):
+def pdf_to_structured_txt(source_path, result_path, mode):
     """
     Convertit un PDF en txt en essayant de détecter la structure.
+    mode :
+     1 = classique, on garde tous les contenus
+     2 = Enoncées uniquement
     """
     import pymupdf
     
@@ -138,8 +141,14 @@ def pdf_to_structured_txt(source_path, result_path):
             if not line:
                 continue
 
-            output_lines.append(line)
-           
+            if mode == 1:
+                output_lines.append(line)
+            elif mode == 2:
+                # Critère page de correction :
+                # Si il y a écrit "correction :" alors on ajoute la ligne
+                if len(text.split('Correction :')) == 0:
+                    output_lines.append(line)
+
     # Écrire le fichier
     with open(result_path, "w", encoding="utf-8") as f:
         f.write("\n".join(output_lines))

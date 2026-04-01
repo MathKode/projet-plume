@@ -53,6 +53,22 @@ if st.session_state.authenticated :
                 help="Le fichier annales à enrichir / compléter"
             )
 
+        pdf_traitement = st.selectbox(
+            "Choisir le parsing du pdf :",
+            [
+                "Garder tout",
+                "Uniquement les énoncées"
+            ]
+        )
+        nb_prompt = st.selectbox(
+            "Choisir le nombre de prompt :",
+            [
+                "Prompt Solo",
+                "Double Prompt"
+            ]
+        )
+        
+
         # ── Étape 2 : Analyse + questions dynamiques ──────────────────────────────
 
         # Initialiser la variable de session pour le bouton
@@ -119,19 +135,13 @@ if st.session_state.authenticated :
                 )
 
                 # --- Transformer les annales pdf en annales txt ---
-                def pdf_to_txt(source_path,result_name):
-                    doc = pymupdf.open(source_path) # open a document
-                    txt_annales = ""
-                    for page in doc: # iterate the document pages
-                        text = page.get_text() #recupere le text format utf8
-                        txt_annales += text
-                    #print(txt_annales)
-                    result_path = os.path.join(tmpdir, result_name)
-                    with open(result_path, "w", encoding="utf-8") as f2:
-                        f2.write(txt_annales)
-                    return result_path
                 
-                annales_txt_path = pdf_to_structured_txt(annales_path, os.path.join(tmpdir, "annales_txt.txt"))
+                if pdf_traitement == "Garder tout":
+                    mode=1
+                elif pdf_traitement == "Uniquement les énoncées":
+                    mode=2
+
+                annales_txt_path = pdf_to_structured_txt(annales_path, os.path.join(tmpdir, "annales_txt.txt"), mode)
                 #annales_txt_path = pdf_to_txt(annales_path,"oki")
                 print(annales_txt_path)
 
@@ -204,6 +214,7 @@ if st.session_state.authenticated :
                             "pt3",
                         ]
                     )
+                
                 # 3. Zone de prompt (modifiable)
                 if pt_choix=="pt1":
                     prompt = st.text_area(
