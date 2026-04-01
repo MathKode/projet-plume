@@ -249,6 +249,12 @@ if st.session_state.authenticated :
 
                     st.write(reponse_ia)
 
+                    #Get the roneo txt
+                    with open(roneo_txt_path,'r') as f:
+                        roneo_txt=f.read()
+                    
+                    st.write(roneo_txt)
+                    
                     #Traitement de la réponse de l'IA :
                     def creation_notion_ls(reponse_ia):
                         notions_ls_var = []
@@ -260,8 +266,13 @@ if st.session_state.authenticated :
                                 if notion[0] == " ": notion = notion[1:]
                                 if notion[-1] == " ": notion = notion[:-1]
                                 
+                                #Vérifie si la notion n'est pas déjà ajoutée
                                 if notion not in notions_ls_var:
-                                    notions_ls_var.append(notion)
+                                    #Vérifie si la notion est effectivement écrite dans le ronéo
+                                    if len(roneo_txt.split(notion)) >= 1:
+                                        notions_ls_var.append(notion)
+                                    else:
+                                        st.write('Notion non dans le ronéo : ', notion)
                                     
                         return notions_ls_var
                     
