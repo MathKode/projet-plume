@@ -26,6 +26,8 @@ if "authenticated" not in st.session_state:
 
 
 if st.session_state.authenticated :
+    dev = st.Toggle('Version dev')
+    st.wrtie(dev)
     tab1, tab2 = st.tabs(["Annales", "Correction orthographe"])
     with tab2:
         correction_orthographe_page()
