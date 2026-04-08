@@ -27,7 +27,7 @@ if "authenticated" not in st.session_state:
 
 if st.session_state.authenticated :
     dev = st.toggle('Version dev')
-    st.wrtie(dev)
+    st.write(dev)
     tab1, tab2 = st.tabs(["Annales", "Correction orthographe"])
     with tab2:
         correction_orthographe_page()
@@ -170,7 +170,7 @@ if st.session_state.authenticated :
                 apikey_openia = st.secrets["API_KEY_OPENAI"]
                 apikey_anthropic = st.secrets["API_KEY_ANTHROPIC"]
 
-                
+
                 st.title("⚙️ Configuration IA")
 
                 # 1. Choix du provider
@@ -271,7 +271,8 @@ if st.session_state.authenticated :
 
                 # 4. Bouton valider
                 if st.button("🚀 Valider"):
-                    st.write(f"[{model}]")
+                    if dev:
+                        st.write(f"[{model}]")
                     if provider == "ChatGPT":
                         #Upload file
                         annales_txt_id = IA_upload_openIA(apikey_openia, annales_txt_path)
@@ -287,8 +288,9 @@ if st.session_state.authenticated :
                         #Ask IA
                         reponse_ia = IA_ask_anthropic(apikey_anthropic,prompt,[annales_txt_id,roneo_txt_id],model)
 
-                    st.success("Configuration validée !")
-                    st.write(reponse_ia)
+                    if dev:
+                        st.success("Configuration validée !")
+                        st.write(reponse_ia)
 
 
                     if nb_prompt == "Double Prompt":
@@ -310,12 +312,14 @@ if st.session_state.authenticated :
                             
                             #Ask IA
                             reponse_ia = IA_ask_anthropic(apikey_anthropic,prompt2,[annales_txt_id,roneo_txt_id,reponse_ia_id],model)   
-                        st.write(reponse_ia)
+                        if dev:
+                            st.write(reponse_ia)
                     #Get the roneo txt
                     with open(roneo_txt_path,'r') as f:
                         roneo_txt=f.read()
                     
-                    st.write(roneo_txt)
+                    if dev:
+                        st.write(roneo_txt)
                     
                     #Traitement de la réponse de l'IA :
                     def creation_notion_ls(reponse_ia):
@@ -334,12 +338,14 @@ if st.session_state.authenticated :
                                     if len(roneo_txt.split(notion)) >= 1:
                                         notions_ls_var.append(notion)
                                     else:
-                                        st.write('Notion non dans le ronéo : ', notion)
+                                        if dev:
+                                            st.write('Notion non dans le ronéo : ', notion)
                                     
                         return notions_ls_var
                     
                     notion_ls = creation_notion_ls(reponse_ia)
-                    st.write(notion_ls)
+                    if dev:
+                        st.write(notion_ls)
 
 
                     # Stocker les données
@@ -417,7 +423,8 @@ if st.session_state.authenticated :
                         else:
                             # Surligner dans le RONEO
                             roneo_final_path = os.path.join(tmpdir, f"NEW_{st.session_state.roneo_file_name}")
-                            st.write(notions_conservees)
+                            if dev:
+                                st.write(notions_conservees)
                             surligner_mots(roneo_path, notions_conservees, roneo_final_path)
     
                             # Lire le fichier en binaire
@@ -429,7 +436,8 @@ if st.session_state.authenticated :
                             # Afficher les notions conservées
                             with st.expander("📌 Notions conservées dans le document"):
                                 for notion in notions_conservees:
-                                    st.write(f"• {notion}")
+                                    if dev:
+                                        st.write(f"• {notion}")
     
                             # Bouton de téléchargement
                             st.download_button(
