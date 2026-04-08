@@ -26,7 +26,7 @@ if "authenticated" not in st.session_state:
 
 
 if st.session_state.authenticated :
-    dev = st.Toggle('Version dev')
+    dev = st.toggle('Version dev')
     st.wrtie(dev)
     tab1, tab2 = st.tabs(["Annales", "Correction orthographe"])
     with tab2:
@@ -55,20 +55,24 @@ if st.session_state.authenticated :
                 help="Le fichier annales à enrichir / compléter"
             )
 
-        pdf_traitement = st.selectbox(
+        if dev:
+            pdf_traitement = st.selectbox(
             "Choisir le parsing du pdf :",
             [
                 "Garder tout",
                 "Uniquement les énoncées"
             ]
-        )
-        nb_prompt = st.selectbox(
-            "Choisir le nombre de prompt :",
-            [
-                "Prompt Solo",
-                "Double Prompt"
-            ]
-        )
+            )
+            nb_prompt = st.selectbox(
+                "Choisir le nombre de prompt :",
+                [
+                    "Prompt Solo",
+                    "Double Prompt"
+                ]
+            )
+        else:
+            pdf_traitement = "Garder tout"
+            nb_prompt = 'Prompt Solo'
         
 
         # ── Étape 2 : Analyse + questions dynamiques ──────────────────────────────
@@ -128,13 +132,14 @@ if st.session_state.authenticated :
                     data_ = f.read()
 
                 # Bouton de téléchargement
-                st.download_button(
-                                label="💾 Télécharger le fichier Word TXT intermédiaire (log)",
-                                data=data_,
-                                file_name=f"roneo_txt.txt",
-                                mime="text/plain",
-                                use_container_width=True
-                )
+                if dev:
+                    st.download_button(
+                                    label="💾 Télécharger le fichier Word TXT intermédiaire (log)",
+                                    data=data_,
+                                    file_name=f"roneo_txt.txt",
+                                    mime="text/plain",
+                                    use_container_width=True
+                    )
 
                 # --- Transformer les annales pdf en annales txt ---
                 
@@ -145,25 +150,27 @@ if st.session_state.authenticated :
 
                 annales_txt_path = pdf_to_structured_txt(annales_path, os.path.join(tmpdir, "annales_txt.txt"), mode)
                 #annales_txt_path = pdf_to_txt(annales_path,"oki")
-                print(annales_txt_path)
+                
 
                 with open(annales_txt_path, "rb") as f:
                     data_ = f.read()
 
                 # Bouton de téléchargement
-                st.download_button(
-                                label="💾 Télécharger le fichier ANNALES TXT intermédiaire (log)",
-                                data=data_,
-                                file_name=f"annales_txt.txt",
-                                mime="text/plain",
-                                use_container_width=True
-                )
+                if dev:
+                    st.download_button(
+                                    label="💾 Télécharger le fichier ANNALES TXT intermédiaire (log)",
+                                    data=data_,
+                                    file_name=f"annales_txt.txt",
+                                    mime="text/plain",
+                                    use_container_width=True
+                    )
 
                 
                 # Connection à l'IA
                 apikey_openia = st.secrets["API_KEY_OPENAI"]
                 apikey_anthropic = st.secrets["API_KEY_ANTHROPIC"]
 
+                
                 st.title("⚙️ Configuration IA")
 
                 # 1. Choix du provider
